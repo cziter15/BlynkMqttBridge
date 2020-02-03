@@ -6,6 +6,7 @@ By changing configured VPIN value on Blynk, it will be reposted to MQTT server a
 Example configuration file is provided in bin/Release directory. Application will look for blynkmqttbridge.ini file every run.
 Once ran, it loads topics mapping and types. There is a simple mechanism which allows to convert values, for example Blynk LED value is parsed as 0 to 255, but MQTT bool value is almost always defined as 0 or 1. Simply, when MQTT topic has value "1", then "255" will be published on Blynk side and when "255" value is published on that pin, it will repost value "1" to MQTT. This behaviour is defined in TypeEncoder.cs in Application directory.
 
+# Value types
 OnOffType - 1 or 0 on MQTT topic and float or int (1 or 0) on blynk
 
 LedType - 1 or 0 on MQTT and 255 or 0 on Blynk side
