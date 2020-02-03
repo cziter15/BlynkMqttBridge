@@ -8,7 +8,7 @@ Once ran, it loads topics mapping and types. There is a simple mechanism which a
 
 # Libraries
 This project is using libraries:
-- M2Mqtt https://github.com/eclipse/paho.mqtt.m2mqtt / Eclipse Public License - v 1.0
+- M2Mqtt https://github.com/eclipse/paho.mqtt.m2mqtt
 - BlynkLibrary by Sverre Frøystein https://github.com/sverrefroy/BlynkLibrary
 - Ini by Larry57 https://gist.github.com/Larry57/5725301
 
