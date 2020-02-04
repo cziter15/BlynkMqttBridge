@@ -133,21 +133,12 @@ namespace BlynkMqttBridge.BlynkLibrary
 			try
 			{
 				tcpClient = new TcpClient();
-
 				tcpClient.NoDelay = true;
 
-				var connectionTask = tcpClient.ConnectAsync(Server, Port).ContinueWith(task =>
-				{
-					return task.IsFaulted ? null : tcpClient;
-				}, TaskContinuationOptions.ExecuteSynchronously);
+				Task task = tcpClient.ConnectAsync(Server, Port);
+				int index = Task.WaitAny(new[] { task }, connectTimeoutMilliseconds);
 
-				var timeoutTask = Task.Delay(connectTimeoutMilliseconds).ContinueWith<TcpClient>(task => null, TaskContinuationOptions.ExecuteSynchronously);
-				var resultTask = Task.WhenAny(connectionTask, timeoutTask).Unwrap();
-
-				resultTask.Wait();
-				var resultTcpClient = resultTask.Result;
-
-				if (resultTcpClient != null)
+				if (tcpClient.Connected)
 				{
 					tcpStream = tcpClient.GetStream();
 
