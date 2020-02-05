@@ -29,7 +29,7 @@ Simply use Visual Studio 2017 and build provided solution.
 
 ## Libraries used by application
 
-[M2Mqtt][m2mqtt] persist here as binary blob. Code can be found at repository - EPL-1.0 license.
+[M2Mqtt][m2mqtt] persist here as binary blob. Code can be found at linked repository.
 
 [Ini Library][ini_library] by Larry57
 
