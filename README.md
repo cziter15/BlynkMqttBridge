@@ -27,7 +27,7 @@ Once ran, it loads topics mapping and types. There is a simple mechanism which a
 
 Simply use Visual Studio 2017 and build provided solution.
 
-## Used libraries
+## Libraries used by application
 
 [M2Mqtt][m2mqtt]
 
