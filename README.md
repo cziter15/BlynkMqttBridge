@@ -30,7 +30,9 @@ Simply use Visual Studio 2017 and build provided solution.
 ## Used libraries
 
 [M2Mqtt][m2mqtt]
+
 [Ini Library][ini_library] by Larry57
+
 [Blynk Library][blynk_library] by Sverre Frøystein 
 
 <!-- Markdown link & img dfn's -->
