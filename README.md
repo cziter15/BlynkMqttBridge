@@ -8,7 +8,7 @@ By changing configured VPIN value on Blynk, it will be reposted to MQTT server a
 Linux (using mono):
 
 ```sh
-mono BlynkMqttBridge -dump
+mono BlynkMqttBridge.exe -dump
 ```
 
 Windows:
