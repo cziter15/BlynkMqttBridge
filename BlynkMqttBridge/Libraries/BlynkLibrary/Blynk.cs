@@ -238,6 +238,19 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
+		/// <summary>
+		/// This is the virtual pin sender.
+		/// </summary>
+		/// <param name="Pin">The virtual pin number to send.</param>
+		/// <param name="Value">The value to send.</param> 
+		public void SendVirtualPin(int Pin, object Value)
+		{
+			BlynkLibrary.VirtualPin vp = new BlynkLibrary.VirtualPin();
+			vp.Value[0] = Value;
+			vp.Pin = Pin;
+			SendVirtualPin(vp);
+		}
+
 		public static void PrepareVirtualWrite(VirtualPin vp, List<byte> txMessage)
 		{
 			txMessage.Add((byte)'v');
