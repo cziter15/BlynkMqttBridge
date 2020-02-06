@@ -32,14 +32,23 @@ namespace BlynkMqttBridge
 	{
 		static void Main(string[] args)
 		{
-			bool HasDumpArg = false;
+			Helpers.Log("----------------------------------------------", ConsoleColor.Green, "[program]");
+			Helpers.Log("Strarting. Build: " + Properties.Resources.BuildDate.Trim(), ConsoleColor.Green, "[program]");
+			Helpers.Log("----------------------------------------------", ConsoleColor.Green, "[program]");
 
 			foreach (string arg in args)
 			{
+				if (arg == "-verbose")
+				{
+					Helpers.LoggingLevel = Helpers.LogLevel.Verbose;
+					Helpers.Log("args: Verbose mode enabled.", ConsoleColor.Green, "[program]");
+					break;
+				}
+
 				if (arg == "-dump")
 				{
-					HasDumpArg = true;
-					Helpers.Log("args: Dump mode enabled.", ConsoleColor.DarkGreen, "[program]");
+					Helpers.LoggingLevel = Helpers.LogLevel.Debug;
+					Helpers.Log("args: Debug/dump mode enabled.", ConsoleColor.Green, "[program]");
 					break;
 				}
 			}
@@ -66,10 +75,12 @@ namespace BlynkMqttBridge
 							{
 								Topics.Add(new TopicEntry(s_topic,vpin,val_type));
 
-								if (HasDumpArg)
-								{
-									Helpers.Log( "+t " + s_topic + " vp:" + s_vpin + " t:" + s_type, ConsoleColor.Cyan, "[config]");
-								}
+								Helpers.Log(
+									"+t " + s_topic + " vp:" + s_vpin + " t:" + s_type, 
+									ConsoleColor.Cyan, 
+									"[config]", 
+									Helpers.LogLevel.Debug
+								);
 							}
 							else
 							{
@@ -91,11 +102,7 @@ namespace BlynkMqttBridge
 				}
 			}
 
-			Helpers.Log("----------------------------------------------", ConsoleColor.DarkGreen, "[program]");
-			Helpers.Log("Strarting...", ConsoleColor.DarkGreen, "[program]");
-			Helpers.Log("----------------------------------------------", ConsoleColor.DarkGreen, "[program]");
-
-			Bridge bridge = new Bridge(Topics, HasDumpArg);
+			Bridge bridge = new Bridge(Topics);
 
 			bridge.SetupBlynk(
 				config.GetValue("token", "BlynkConnection", ""),

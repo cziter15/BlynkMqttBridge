@@ -96,7 +96,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 
 		private string Authentication;
 		private string Server;
-		private int Port;
+		private int Port = 8080;
 		private Stream tcpStream;
 		private int txMessageId;
 
@@ -118,13 +118,20 @@ namespace BlynkMqttBridge.BlynkLibrary
 
 		}
 
-		public void setConnection(string authentication, string server, int port)
+		public void setConnection(string authentication, string server, string port)
 		{
 			stopConnection();
 
+			Helpers.Log(
+				"setConnection -> server: " + server + ":" + port + ", token: " + authentication,
+				ConsoleColor.Red,
+				"[Mqtt-Library]",
+				Helpers.LogLevel.Verbose
+			);
+
+			Int32.TryParse(port, out Port);
 			Authentication = authentication;
 			Server = server;
-			Port = port;
 
 			blynkTimer = new Timer(timer_Tick, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
 		}
@@ -423,8 +430,13 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 			else
 			{
+				Helpers.Log("Trigger reconnect...", ConsoleColor.Red, "[Blynk-Library]", Helpers.LogLevel.Verbose);
+
 				Disconnect();
 				Connect();
+
+				if (Connected)
+					Helpers.Log("Connected to Blynk :)", ConsoleColor.Green, "[Blynk-Library]", Helpers.LogLevel.Verbose);
 			}
 		}
 
@@ -561,7 +573,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 			{
 				tcpStream.Write(txMessage.ToArray(), 0, txMessage.Count);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				Disconnect();
 			}

@@ -63,6 +63,13 @@ namespace BlynkMqttBridge.MqttLibrary
 		{
 			try
 			{
+				Helpers.Log(
+					"setConnection -> server: " + server + ":" + port + ", user: " + username + ", pass: " + password,
+					ConsoleColor.Red, 
+					"[Mqtt-Library]", 
+					Helpers.LogLevel.Verbose
+				);
+
 				stopConnection();
 
 				cachedServer = server;
@@ -108,7 +115,11 @@ namespace BlynkMqttBridge.MqttLibrary
 
 			if (!Connected)
 			{
+				Helpers.Log("Trigger reconnect...", ConsoleColor.Red, "[Mqtt-Library]", Helpers.LogLevel.Verbose);
 				ConnectInternal();
+
+				if (activeClient != null && activeClient.IsConnected)
+					Helpers.Log("Connected to MQTT :)", ConsoleColor.Green, "[Mqtt-Library]", Helpers.LogLevel.Verbose);
 			}
 		}
 

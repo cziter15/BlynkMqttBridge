@@ -34,15 +34,12 @@ namespace BlynkMqttBridge
 		private BlynkLibrary.Blynk blynkConn = null;
 		private MqttLibrary.MqttHandler mqttConn = null;
 
-		private bool Debug = false;
-
 		private List<string> PendingMqttTopics = new List<string>();
 		private List<TopicEntry> TopicList = new List<TopicEntry>();
 
-		public Bridge(List<TopicEntry> Topics, bool DisplayDebug = false)
+		public Bridge(List<TopicEntry> Topics)
 		{
 			TopicList = Topics;
-			Debug = DisplayDebug;
 		}
 
 		public void SetupBlynk(string token, string server, string port)
@@ -50,12 +47,9 @@ namespace BlynkMqttBridge
 			if (blynkConn != null)
 				blynkConn.stopConnection();
 
-			int target_port = 8080;
-			Int32.TryParse(port, out target_port);
-
 			blynkConn = new BlynkLibrary.Blynk();
-			blynkConn.setConnection(token, server, target_port);
 			blynkConn.VirtualPinReceived += BlynkConn_VirtualPinReceived;
+			blynkConn.setConnection(token, server, port);
 		}
 
 		public void SetupMqtt(string user, string password, string server, string port)
@@ -64,9 +58,9 @@ namespace BlynkMqttBridge
 				mqttConn.stopConnection();
 
 			mqttConn = new MqttLibrary.MqttHandler();
-			mqttConn.setConnection(server, port, user, password);
 			mqttConn.PublishReceivedEvent += MqttConn_PublishReceivedEvent;
 			mqttConn.ConnectionChangeEvent += MqttConn_ConnectionChangeEvent;
+			mqttConn.setConnection(server, port, user, password);
 		}
 
 		private void MqttConn_ConnectionChangeEvent(bool Connected)
@@ -98,11 +92,12 @@ namespace BlynkMqttBridge
 					{
 						blynkConn.SendVirtualPin(Entry.BlynkVpin, Entry.Encoder.toBlynk(Payload));
 
-						if (Debug)
-							Helpers.Log(
-								"T:" + Entry.MqttTopic + " -> VPIN:" + Entry.BlynkVpin + " value: " + Payload, 
-								ConsoleColor.Yellow, "[mqtt->blynk]"
-							);
+						Helpers.Log(
+							"T:" + Entry.MqttTopic + " -> VPIN:" + Entry.BlynkVpin + " value: " + Payload, 
+							ConsoleColor.Yellow, 
+							"[mqtt->blynk]",
+							Helpers.LogLevel.Debug
+						);
 						
 						break;
 					}
@@ -124,11 +119,12 @@ namespace BlynkMqttBridge
 					if (Entry.BlynkAck)
 						blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
-					if (Debug)
-						Helpers.Log(
-							"VPIN:" + Entry.BlynkVpin + " -> T:" + Entry.MqttTopic + " value: " + inValue, 
-							ConsoleColor.Magenta, "[blynk->mqtt]"
-						);
+					Helpers.Log(
+						"VPIN:" + Entry.BlynkVpin + " -> T:" + Entry.MqttTopic + " value: " + inValue, 
+						ConsoleColor.Magenta, 
+						"[blynk->mqtt]", 
+						Helpers.LogLevel.Debug
+					);
 
 					break;
 				}
