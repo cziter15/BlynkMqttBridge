@@ -143,14 +143,5 @@ namespace BlynkMqttBridge.MqttLibrary
 			if (activeClient != null && activeClient.IsConnected)
 				activeClient.Publish(topic, payload, 0, true);
 		}
-
-		public void Dispose()
-		{
-			if (activeClient != null && activeClient.IsConnected)
-			{
-				activeClient.Disconnect();
-				activeClient = null;
-			}
-		}
 	}
 }

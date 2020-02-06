@@ -20,12 +20,10 @@
 //  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
 //  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-using BlynkMqttBridge.Application;
-using BlynkMqttBridge.MqttLibrary;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using BlynkMqttBridge.Application;
 
 namespace BlynkMqttBridge
 {
@@ -33,8 +31,8 @@ namespace BlynkMqttBridge
 	{
 		private ManualResetEvent bridgeStop = new ManualResetEvent(false);
 
-		public BlynkLibrary.Blynk blynkConn = null;
-		public MqttHandler mqttConn = null;
+		private BlynkLibrary.Blynk blynkConn = null;
+		private MqttLibrary.MqttHandler mqttConn = null;
 
 		private bool Debug = false;
 
@@ -50,15 +48,14 @@ namespace BlynkMqttBridge
 		public void SetupBlynk(string token, string server, string port)
 		{
 			if (blynkConn != null)
-				blynkConn.Disconnect();
+				blynkConn.stopConnection();
 
 			int target_port = 8080;
 			Int32.TryParse(port, out target_port);
 
-			blynkConn = new BlynkLibrary.Blynk(token, server, target_port);
+			blynkConn = new BlynkLibrary.Blynk();
+			blynkConn.setConnection(token, server, target_port);
 			blynkConn.VirtualPinReceived += BlynkConn_VirtualPinReceived;
-
-			blynkConn.Connect();
 		}
 
 		public void SetupMqtt(string user, string password, string server, string port)
@@ -66,7 +63,7 @@ namespace BlynkMqttBridge
 			if (mqttConn != null)
 				mqttConn.stopConnection();
 
-			mqttConn = new MqttHandler();
+			mqttConn = new MqttLibrary.MqttHandler();
 			mqttConn.setConnection(server, port, user, password);
 			mqttConn.PublishReceivedEvent += MqttConn_PublishReceivedEvent;
 			mqttConn.ConnectionChangeEvent += MqttConn_ConnectionChangeEvent;
@@ -143,7 +140,7 @@ namespace BlynkMqttBridge
 			bridgeStop.WaitOne();
 
 			if (blynkConn != null)
-				blynkConn.Disconnect();
+				blynkConn.stopConnection();
 			
 			if (mqttConn != null)
 				mqttConn.stopConnection();

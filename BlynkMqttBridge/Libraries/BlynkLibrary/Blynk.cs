@@ -106,7 +106,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 
 		#endregion
 
-		#region Public methods
 
 		/// <summary>
 		/// This is the Blynk constructor.
@@ -114,20 +113,24 @@ namespace BlynkMqttBridge.BlynkLibrary
 		/// <param name="authentication">The Blynk authentication token.</param>
 		/// <param name="server">Sever connection string url.</param>
 		/// <param name="port">The server port to connect to.</param>
-		public Blynk(string authentication, string server, int port)
+		public Blynk()
 		{
+
+		}
+
+		public void setConnection(string authentication, string server, int port)
+		{
+			stopConnection();
+
 			Authentication = authentication;
 			Server = server;
 			Port = port;
+
+			blynkTimer = new Timer(timer_Tick, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
 		}
 
-		/// <summary>
-		/// This method will try to establish a connection to the Blynk server.
-		/// </summary>
-		/// <returns>'True' if a connection is established, 'False' if not.</returns>
-		public bool Connect()
+		private void Connect()
 		{
-			bool result = false;
 			int connectTimeoutMilliseconds = 1000;
 
 			try
@@ -163,46 +166,30 @@ namespace BlynkMqttBridge.BlynkLibrary
 					connected = true;
 
 					Task.Run(new Action(blynkReceiver));
-
-					result = true;
 				}
 				else
 				{
-					// Not connected
+					throw new Exception("Connect timeout");
 				}
 			}
 			catch (Exception)
 			{
+				Disconnect();
 			}
-
-			blynkTimer = new Timer(timer_Tick, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
-
-			return result;
 		}
 
-		/// <summary>
-		/// This method will disconnect from the Blynk server.
-		/// </summary>
-		public void Disconnect()
+		private void Disconnect()
 		{
-			try
-			{
-				blynkTimer.Dispose();
-
-				connected = false;
-
+			if (tcpStream != null)
 				tcpStream.Dispose();
+
+			if (tcpClient != null)
 				tcpClient.Close();
-			}
-			catch (Exception)
-			{
-			}
+
+			connected = false;
 		}
 
-		/// <summary>
-		/// This is the ping sender.
-		/// </summary>
-		public void SendPing()
+		private void SendPing()
 		{
 			if (Connected)
 			{
@@ -219,10 +206,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// This is the virtual pin sender.
-		/// </summary>
-		/// <param name="vp">The virtual pin to send.</param>
 		public void SendVirtualPin(VirtualPin vp)
 		{
 			if (Connected)
@@ -238,11 +221,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// This is the virtual pin sender.
-		/// </summary>
-		/// <param name="Pin">The virtual pin number to send.</param>
-		/// <param name="Value">The value to send.</param> 
 		public void SendVirtualPin(int Pin, object Value)
 		{
 			BlynkLibrary.VirtualPin vp = new BlynkLibrary.VirtualPin();
@@ -251,7 +229,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 			SendVirtualPin(vp);
 		}
 
-		public static void PrepareVirtualWrite(VirtualPin vp, List<byte> txMessage)
+		private static void PrepareVirtualWrite(VirtualPin vp, List<byte> txMessage)
 		{
 			txMessage.Add((byte)'v');
 			txMessage.Add((byte)'w');
@@ -275,10 +253,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			txMessage.Insert(4, (byte)((msgLength)));
 		}
 
-		/// <summary>
-		/// This is the digital pin sender.
-		/// </summary>
-		/// <param name="dp">The digital pin to send.</param>
 		public void SendDigitalPin(DigitalPin dp)
 		{
 			if (Connected)
@@ -317,10 +291,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// This is the widget set property sender
-		/// </summary>
-		/// <param name="vp">The virtual pin with properties to send.</param>
 		public void SetProperty(VirtualPin vp)
 		{
 			if (Connected)
@@ -353,10 +323,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// Reads a virtual pin.
-		/// </summary>
-		/// <param name="vp">The virtual pin to read.</param>
 		public void ReadVirtualPin(VirtualPin vp)
 		{
 			if (Connected)
@@ -449,15 +415,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		#endregion
-
-		#region Private methods
-
-		/// <summary>
-		/// Tis is the timer tick event handler for the tcp keep alive process which
-		/// sends a ping at a regular basis.
-		/// </summary>
-		/// <param name="timer">The timer which triggered this event</param>
 		private void timer_Tick(object state)
 		{
 			if (Connected)
@@ -466,22 +423,11 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 			else
 			{
-				if (blynkTimer != null)
-					blynkTimer.Dispose();
-
-				if (tcpStream != null)
-					tcpStream.Dispose();
-
-				if (tcpClient != null)
-					tcpClient.Close();
-
+				Disconnect();
 				Connect();
 			}
 		}
 
-		/// <summary>
-		/// This is the tcp receiver background tread which reads incomming tcp data.
-		/// </summary>
 		private void blynkReceiver()
 		{
 			while (Connected)
@@ -490,10 +436,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// This is the tcp reader which performs a synchronos read from tcp, splits it into Blynk messages
-		/// and sends the messages to the decoder.
-		/// </summary>
 		private void readTcpStream()
 		{
 			UInt16 rcMessageId = 0;
@@ -537,10 +479,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// This is the Blynk message decoder.
-		/// </summary>
-		/// <param name="rcMessage">The Blynk message to decode</param>
 		private UInt16 decodeMessage(List<byte> rcMessage)
 		{
 			UInt16 messageLength = (UInt16)(rcMessage.Count - 5);
@@ -601,10 +539,6 @@ namespace BlynkMqttBridge.BlynkLibrary
 			return rcMessageId;
 		}
 
-		/// <summary>
-		/// This is the message response sender.
-		/// </summary>
-		/// <param name="mId">The Id of the message responding to.</param>
 		private void SendResponse(int mId)
 		{
 			if (Connected)
@@ -621,21 +555,25 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 		}
 
-		/// <summary>
-		/// This is the tcp writer.
-		/// </summary>
-		/// <param name="txMessage">The Blynk message to send to tcp.</param>
 		private void WriteToTcpStream(List<byte> txMessage)
 		{
 			try
 			{
 				tcpStream.Write(txMessage.ToArray(), 0, txMessage.Count);
 			}
-			catch (IOException)
+			catch (Exception e)
 			{
-				connected = false;
+				Disconnect();
 			}
 		}
-		#endregion
+
+
+		public void stopConnection()
+		{
+			if (blynkTimer != null)
+				blynkTimer.Dispose();
+
+			Disconnect();
+		}
 	}
 }
