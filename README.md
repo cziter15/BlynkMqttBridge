@@ -17,6 +17,7 @@ Windows:
 BlynkMqttBridge.exe -dump
 ```
 Valid .ini configuration file should be provided in executable directory.
+Command line arguments -verbose or -dump might be used to determine debug level.
 
 ## Configuration
 
