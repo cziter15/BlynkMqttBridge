@@ -3,7 +3,7 @@
 This C# application works as a two-way bridge between MQTT and Blynk App.
 By changing configured VPIN value on Blynk, it will be reposted to MQTT server and vice versa.
 
-![alt text](https://instagram.fwaw7-1.fna.fbcdn.net/v/t51.2885-15/sh0.08/e35/s640x640/82486275_315298372698025_7144692239252446043_n.jpg?_nc_ht=instagram.fwaw7-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=PWVnWf5t5uEAX9ElKDl&oh=fd873777379916769a02567f824e9fde&oe=5EBD45D6 ".. in action")
+![alt text](https://i.imgur.com/E33lDYB.jpg ".. in action")
 
 ## Usage example
 
