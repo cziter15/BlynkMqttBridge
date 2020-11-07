@@ -58,8 +58,22 @@ namespace BlynkMqttBridge
 			}
 		}
 
+		private class _OnOffSegmentedType : _OnOffType
+		{
+			public override string fromBlynk(string value)
+			{
+				return value == "1" ? "1" : "0";
+			}
+			public override string toBlynk(string value)
+			{
+				return value == "1" ? "1" : "2";
+			}
+		}
+
+
 		public static _StraightType LedType = new _LedType();
 		public static _StraightType OnOffType = new _OnOffType();
+		public static _StraightType OnOffSegmented = new _OnOffSegmentedType();
 		public static _StraightType StraightType = new _StraightType();
 
 		public static _StraightType TypeFromName(string typename)
@@ -68,6 +82,7 @@ namespace BlynkMqttBridge
 			{
 				case "LedType": return LedType;
 				case "OnOffType": return OnOffType;
+				case "OnOffSegmented": return OnOffSegmented;
 				case "StraightType": return StraightType;
 			}
 
