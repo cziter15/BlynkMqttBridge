@@ -78,6 +78,7 @@ namespace BlynkMqttBridge
 			}
 			public override string toBlynk(string value)
 			{
+				value = value.Replace(", ", "\n");
 				return value + "\n";
 			}
 		}
