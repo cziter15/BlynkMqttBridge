@@ -70,11 +70,23 @@ namespace BlynkMqttBridge
 			}
 		}
 
+		private class _TerminalType : _StraightType
+		{
+			public override string fromBlynk(string value)
+			{
+				return value;
+			}
+			public override string toBlynk(string value)
+			{
+				return value + "\n";
+			}
+		}
 
 		public static _StraightType LedType = new _LedType();
 		public static _StraightType OnOffType = new _OnOffType();
 		public static _StraightType OnOffSegmented = new _OnOffSegmentedType();
 		public static _StraightType StraightType = new _StraightType();
+		public static _StraightType TerminalType = new _TerminalType();
 
 		public static _StraightType TypeFromName(string typename)
 		{
@@ -84,6 +96,7 @@ namespace BlynkMqttBridge
 				case "OnOffType": return OnOffType;
 				case "OnOffSegmented": return OnOffSegmented;
 				case "StraightType": return StraightType;
+				case "TerminalType": return TerminalType;
 			}
 
 			return null;

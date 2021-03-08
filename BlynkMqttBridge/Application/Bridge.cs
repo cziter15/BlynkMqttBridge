@@ -72,7 +72,7 @@ namespace BlynkMqttBridge
 				string[] topics = new string[TopicList.Count];
 
 				for (int i = 0; i < topics.Length; i++)
-					topics[i] = TopicList[i].MqttTopic;
+					topics[i] = TopicList[i].InTopic;
 
 				mqttConn.Subscribe(topics);
 			}
@@ -88,12 +88,12 @@ namespace BlynkMqttBridge
 			{
 				foreach (TopicEntry Entry in TopicList)
 				{
-					if (Entry.MqttTopic == Topic)
+					if (Entry.InTopic == Topic)
 					{
 						blynkConn.SendVirtualPin(Entry.BlynkVpin, Entry.Encoder.toBlynk(Payload));
 
 						Helpers.Log(
-							"T:" + Entry.MqttTopic + " -> VPIN:" + Entry.BlynkVpin + " value: " + Payload, 
+							"T:" + Entry.InTopic + " -> VPIN:" + Entry.BlynkVpin + " value: " + Payload, 
 							ConsoleColor.Yellow, 
 							"[mqtt->blynk]",
 							Helpers.LogLevel.Debug
@@ -113,14 +113,16 @@ namespace BlynkMqttBridge
 				{
 					string inValue = e.Data.Value[0].ToString();
 
-					PendingMqttTopics.Add(Entry.MqttTopic);
-					mqttConn.SendMessage(Entry.MqttTopic, Entry.Encoder.fromBlynk(inValue));
+					string BlynkOutTopic = Entry.OutTopic.Length > 0 ? Entry.OutTopic : Entry.InTopic;
+
+					PendingMqttTopics.Add(BlynkOutTopic);
+					mqttConn.SendMessage(BlynkOutTopic, Entry.Encoder.fromBlynk(inValue));
 
 					if (Entry.BlynkAck)
 						blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
 					Helpers.Log(
-						"VPIN:" + Entry.BlynkVpin + " -> T:" + Entry.MqttTopic + " value: " + inValue, 
+						"VPIN:" + Entry.BlynkVpin + " -> T:" + Entry.InTopic + " value: " + inValue, 
 						ConsoleColor.Magenta, 
 						"[blynk->mqtt]", 
 						Helpers.LogLevel.Debug

@@ -62,6 +62,7 @@ namespace BlynkMqttBridge
 				if (Section.StartsWith("Topic"))
 				{
 					string s_topic = config.GetValue("mqtt_topic", Section, "");
+					string s_topic_out = config.GetValue("mqtt_topic_out", Section, s_topic);
 					string s_vpin = config.GetValue("blynk_vpin", Section, "");
 					string s_type = config.GetValue("type", Section, "");
 
@@ -73,7 +74,7 @@ namespace BlynkMqttBridge
 							TypeEncoder._StraightType val_type = TypeEncoder.TypeFromName(s_type);
 							if (val_type != null)
 							{
-								Topics.Add(new TopicEntry(s_topic,vpin,val_type));
+								Topics.Add(new TopicEntry(s_topic, s_topic_out, vpin, val_type, s_topic_out.Length == 0));
 
 								Helpers.Log(
 									"+t " + s_topic + " vp:" + s_vpin + " t:" + s_type, 
