@@ -116,7 +116,7 @@ namespace BlynkMqttBridge
 					string BlynkOutTopic = Entry.OutTopic.Length > 0 ? Entry.OutTopic : Entry.InTopic;
 
 					PendingMqttTopics.Add(BlynkOutTopic);
-					mqttConn.SendMessage(BlynkOutTopic, Entry.Encoder.fromBlynk(inValue));
+					mqttConn.SendMessage(BlynkOutTopic, Entry.Encoder.fromBlynk(inValue), !Entry.NoRetain);
 
 					if (Entry.BlynkAck)
 						blynkConn.SendVirtualPin(e.Data.Pin, inValue);

@@ -29,14 +29,17 @@ namespace BlynkMqttBridge.Application
 		public string OutTopic { get; }
 		public int BlynkVpin { get; }
 		public bool BlynkAck { get; }
+		public bool NoRetain { get; }
+
 		public TypeEncoder._StraightType Encoder { get; }
 
-		public TopicEntry(string InTopic, string OutTopic, int BlynkVpin, TypeEncoder._StraightType Encoder, bool BlynkAck = true)
+		public TopicEntry(string InTopic, string OutTopic, int BlynkVpin, TypeEncoder._StraightType Encoder, bool NoRetain, bool BlynkAck)
 		{
 			this.InTopic = InTopic;
 			this.OutTopic = OutTopic;
 			this.BlynkVpin = BlynkVpin;
 			this.Encoder = Encoder;
+			this.NoRetain = NoRetain;
 			this.BlynkAck = BlynkAck;
 		}
 	}

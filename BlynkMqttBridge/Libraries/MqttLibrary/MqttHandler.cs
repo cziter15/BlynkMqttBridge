@@ -144,15 +144,15 @@ namespace BlynkMqttBridge.MqttLibrary
 				activeClient.Unsubscribe(topics);
 		}
 
-		public void SendMessage(string topic, string payload)
+		public void SendMessage(string topic, string payload, bool retain)
 		{
-			SendMessage(topic, Encoding.UTF8.GetBytes(payload));
+			SendMessage(topic, Encoding.UTF8.GetBytes(payload), retain);
 		}
 
-		public void SendMessage(string topic, byte[] payload)
+		public void SendMessage(string topic, byte[] payload, bool retain)
 		{
 			if (activeClient != null && activeClient.IsConnected)
-				activeClient.Publish(topic, payload, 0, true);
+				activeClient.Publish(topic, payload, 0, retain);
 		}
 	}
 }
