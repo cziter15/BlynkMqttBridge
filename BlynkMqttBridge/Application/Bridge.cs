@@ -93,7 +93,7 @@ namespace BlynkMqttBridge
 						blynkConn.SendVirtualPin(Entry.BlynkVpin, Entry.Encoder.toBlynk(Payload));
 
 						Helpers.Log(
-							"T:" + Entry.InTopic + " -> VPIN:" + Entry.BlynkVpin + " value: " + Payload, 
+							"Topic [[c=green]]" + Entry.InTopic + " [[c=white]]-> VPIN [[c=magenta]]" + Entry.BlynkVpin + " [[c=white]]value [[c=yellow]]" + Payload, 
 							ConsoleColor.Yellow, 
 							"[mqtt->blynk]",
 							Helpers.LogLevel.Debug
@@ -122,7 +122,7 @@ namespace BlynkMqttBridge
 						blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
 					Helpers.Log(
-						"VPIN:" + Entry.BlynkVpin + " -> T:" + Entry.InTopic + " value: " + inValue, 
+						"VPIN [[c=magenta]]" + Entry.BlynkVpin + " [[c=white]]-> Topic [[c=green]]" + Entry.InTopic + " [[c=white]]value [[c=yellow]]" + inValue, 
 						ConsoleColor.Magenta, 
 						"[blynk->mqtt]", 
 						Helpers.LogLevel.Debug

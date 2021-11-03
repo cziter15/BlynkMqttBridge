@@ -123,7 +123,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 			stopConnection();
 
 			Helpers.Log(
-				"setConnection -> server: " + server + ":" + port + ", token: " + authentication,
+				"setConnection -> server: [[c=magenta]]" + server + "[[c=white]]:[[c=yellow]]" + port + "[[c=white]], token: [[c=red]]" + authentication,
 				ConsoleColor.Red,
 				"[Mqtt-Library]",
 				Helpers.LogLevel.Verbose

@@ -64,7 +64,7 @@ namespace BlynkMqttBridge.MqttLibrary
 			try
 			{
 				Helpers.Log(
-					"setConnection -> server: " + server + ":" + port + ", user: " + username + ", pass: " + password,
+					"setConnection -> server: [[c=magenta]]" + server + "[[c=white]]:[[c=yellow]]" + port + "[[c=white]], user: " + username + ", pass: " + password,
 					ConsoleColor.Red, 
 					"[Mqtt-Library]", 
 					Helpers.LogLevel.Verbose
