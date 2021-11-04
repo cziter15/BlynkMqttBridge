@@ -61,7 +61,7 @@ namespace BlynkMqttBridge.Properties {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 2020-02-06 18:08:21,22 
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 2021-11-04_18:14:55,66 
         ///.
         /// </summary>
         internal static string BuildDate {

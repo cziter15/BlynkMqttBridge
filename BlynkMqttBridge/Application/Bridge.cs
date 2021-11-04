@@ -92,9 +92,13 @@ namespace BlynkMqttBridge
 					{
 						blynkConn.SendVirtualPin(Entry.BlynkVpin, Entry.Encoder.toBlynk(Payload));
 
-						Helpers.LogColor(ConsoleColor.Green, "[mqtt->blynk]", Helpers.LogLevel.Debug, 
-							new[] { ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White, ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.Yellow }, 
-							"Forward MqttTopic ", Entry.InTopic, " -> to BlynkVPin ", Entry.BlynkVpin.ToString(), " value ", Payload
+						Helpers.LogColor(ConsoleColor.Green, "[mqtt->blynk]", Helpers.LogLevel.Debug,
+							("Forward MqttTopic ", ConsoleColor.White),
+							(Entry.InTopic, ConsoleColor.Cyan),
+							(" -> to BlynkVPin ", ConsoleColor.White),
+							(Entry.BlynkVpin.ToString(), ConsoleColor.Magenta),
+							(" => value: ", ConsoleColor.White),
+							(Payload, ConsoleColor.Yellow)
 						);
 
 						break;
@@ -120,8 +124,12 @@ namespace BlynkMqttBridge
 						blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
 					Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt]", Helpers.LogLevel.Debug,
-						new[] { ConsoleColor.White, ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.Cyan, ConsoleColor.White, ConsoleColor.Yellow },
-						"Forward BlynkVPin ", Entry.BlynkVpin.ToString(), " -> to MqttTopic ", Entry.InTopic, " value ", inValue
+						("Forward BlynkVPin ", ConsoleColor.White),
+						(Entry.BlynkVpin.ToString(), ConsoleColor.Magenta),
+						(" -> to MqttTopic ", ConsoleColor.White),
+						(Entry.InTopic, ConsoleColor.Cyan),
+						(" => value: ", ConsoleColor.White),
+						(inValue, ConsoleColor.Yellow)
 					);
 
 					break;

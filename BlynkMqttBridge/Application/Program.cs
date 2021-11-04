@@ -33,7 +33,7 @@ namespace BlynkMqttBridge
 		static void Main(string[] args)
 		{
 			Helpers.Log("----------------------------------------------", ConsoleColor.Green, "[program]");
-			Helpers.Log("Strarting. Build: " + Properties.Resources.BuildDate.Trim(), ConsoleColor.Green, "[program]");
+			Helpers.Log("Starting bridge. Build: " + Properties.Resources.BuildDate.Trim(), ConsoleColor.Green, "[program]");
 			Helpers.Log("----------------------------------------------", ConsoleColor.Green, "[program]");
 
 			foreach (string arg in args)

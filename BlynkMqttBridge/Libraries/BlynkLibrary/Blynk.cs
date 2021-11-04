@@ -123,9 +123,12 @@ namespace BlynkMqttBridge.BlynkLibrary
 			stopConnection();
 
 			Helpers.LogColor(ConsoleColor.Red, "[Mqtt-Library]", Helpers.LogLevel.Verbose,
-				new[] { ConsoleColor.White, ConsoleColor.Magenta, ConsoleColor.White },
-				"setConnection -> server: ", server + ":" + port, ", token: ", authentication
+				("setConnection -> server: ", ConsoleColor.White),
+				(server + ":" + port, ConsoleColor.Magenta),
+				(", token:  ", ConsoleColor.White),
+				(authentication, ConsoleColor.Cyan)
 			);
+
 
 			Int32.TryParse(port, out Port);
 			Authentication = authentication;

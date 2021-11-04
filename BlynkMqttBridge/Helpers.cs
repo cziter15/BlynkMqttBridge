@@ -19,24 +19,27 @@ namespace BlynkMqttBridge
 
 		public static void Log(string text, ConsoleColor color = ConsoleColor.White, string prefix = "", LogLevel level = LogLevel.Always)
 		{
-			LogColor(color, prefix, level, new[] { ConsoleColor.White }, new[] { text });
+			LogColor(color, prefix, level, (text, ConsoleColor.White));
 		}
 
-		public static void LogColor(ConsoleColor PrefixColor, string prefix, LogLevel level, ConsoleColor[] Colors, params string[] Texts)
+		public static void LogColor(ConsoleColor PrefixColor, string prefix, LogLevel level, params (string text, ConsoleColor color)[] Texts)
 		{
 			if (level <= LoggingLevel)
 			{
 				if (prefix.Length > 0)
 					prefix = " " + prefix;
 
+				Console.ForegroundColor = ConsoleColor.DarkYellow;
+				Console.Write("[" + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss") + "]");
+
 				Console.ForegroundColor = PrefixColor;
-				Console.Write("[" + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss") + "]" + prefix + " ");
+				Console.Write(prefix + " ");
 				Console.ForegroundColor = ConsoleColor.White;
-				
-				for (int i = 0; i < Texts.Length; i++)
+
+				foreach (var text in Texts)
 				{
-					if (i < Colors.Length) Console.ForegroundColor = Colors[i];
-					Console.Write(Texts[i]);
+					Console.ForegroundColor = text.color;
+					Console.Write(text.text);
 				}
 
 				Console.Write(Environment.NewLine);
