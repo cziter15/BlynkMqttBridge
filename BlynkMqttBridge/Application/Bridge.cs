@@ -20,6 +20,7 @@
 //  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
 //  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -95,8 +96,9 @@ namespace BlynkMqttBridge
 						Helpers.LogColor(ConsoleColor.Green, "[mqtt->blynk]", Helpers.LogLevel.Debug,
 							("Forward MqttTopic ", ConsoleColor.White),
 							(Entry.InTopic, ConsoleColor.Cyan),
-							(" -> to BlynkVPin ", ConsoleColor.White),
-							(Entry.BlynkVpin.ToString(), ConsoleColor.Magenta),
+							(" -> ", ConsoleColor.Red),
+							("to BlynkVPin ", ConsoleColor.White),
+							(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
 							(" => value: ", ConsoleColor.White),
 							(Payload, ConsoleColor.Yellow)
 						);
@@ -114,7 +116,6 @@ namespace BlynkMqttBridge
 				if (Entry.BlynkVpin == e.Data.Pin)
 				{
 					string inValue = e.Data.Value[0].ToString();
-
 					string BlynkOutTopic = Entry.OutTopic.Length > 0 ? Entry.OutTopic : Entry.InTopic;
 
 					PendingMqttTopics.Add(BlynkOutTopic);
@@ -125,8 +126,9 @@ namespace BlynkMqttBridge
 
 					Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt]", Helpers.LogLevel.Debug,
 						("Forward BlynkVPin ", ConsoleColor.White),
-						(Entry.BlynkVpin.ToString(), ConsoleColor.Magenta),
-						(" -> to MqttTopic ", ConsoleColor.White),
+						(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
+						(" -> ", ConsoleColor.Red),
+						("to MqttTopic ", ConsoleColor.White),
 						(Entry.InTopic, ConsoleColor.Cyan),
 						(" => value: ", ConsoleColor.White),
 						(inValue, ConsoleColor.Yellow)
