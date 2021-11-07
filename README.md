@@ -5,7 +5,7 @@ By changing configured VPIN value on Blynk, it will be reposted to MQTT server a
 
 ![alt text](img/demo2.jpg ".. in action")
 
-![alt text](img/demo2.png ".. in action")
+![alt text](img/demo1.png ".. in action")
 
 ## Usage example
 
