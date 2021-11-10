@@ -31,7 +31,7 @@ namespace BlynkMqttBridge.IniLibrary
 		/// </summary>
 		public void Load()
 		{
-			var txt = File.ReadAllText(file);
+			var txt = File.ReadAllText(file, Encoding.Default);
 
 			Dictionary<string, string> currentSection = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 

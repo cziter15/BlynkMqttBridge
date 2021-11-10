@@ -91,7 +91,10 @@ namespace BlynkMqttBridge.MqttLibrary
 			TerminateClient();
 
 			if (connectionCheckerTimer != null)
+			{
 				connectionCheckerTimer.Dispose();
+				connectionCheckerTimer = null;
+			}
 		}
 
 		private void TerminateClient()
@@ -103,9 +106,14 @@ namespace BlynkMqttBridge.MqttLibrary
 			}
 		}
 
+		public bool IsConnected()
+		{
+			return activeClient != null && activeClient.IsConnected;
+		}
+
 		private void TimerCallback(Object o)
 		{
-			bool Connected = activeClient != null && activeClient.IsConnected;
+			bool Connected = IsConnected();
 
 			if (Connected != wasConnected)
 			{
@@ -117,7 +125,7 @@ namespace BlynkMqttBridge.MqttLibrary
 
 			if (!Connected)
 			{
-				Helpers.Log("Trigger reconnect...", ConsoleColor.Red, "[Mqtt-Library]", Helpers.LogLevel.Verbose);
+				Helpers.Log("Try connect to MQTT...", ConsoleColor.Yellow, "[Mqtt-Library]", Helpers.LogLevel.Verbose);
 				ConnectInternal();
 
 				if (activeClient != null && activeClient.IsConnected)

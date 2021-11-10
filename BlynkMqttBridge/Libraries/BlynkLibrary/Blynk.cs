@@ -431,7 +431,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 			}
 			else
 			{
-				Helpers.Log("Trigger reconnect...", ConsoleColor.Red, "[Blynk-Library]", Helpers.LogLevel.Verbose);
+				Helpers.Log("Try connect to Blynk server...", ConsoleColor.Yellow, "[Blynk-Library]", Helpers.LogLevel.Verbose);
 
 				Disconnect();
 				Connect();

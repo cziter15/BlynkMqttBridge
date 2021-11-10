@@ -33,7 +33,9 @@ namespace BlynkMqttBridge
 		static void Main(string[] args)
 		{
 			Helpers.Log("----------------------------------------------", ConsoleColor.Green, "[program]");
-			Helpers.Log("Starting bridge. Build: " + Properties.Resources.BuildDate.Trim(), ConsoleColor.Green, "[program]");
+			Helpers.LogColor(ConsoleColor.Green, "[program]", Helpers.LogLevel.Always,
+				("Starting bridge. Build: ", ConsoleColor.White), (Properties.Resources.BuildDate.Trim(), ConsoleColor.Red)
+			);
 			Helpers.Log("----------------------------------------------", ConsoleColor.Green, "[program]");
 
 			foreach (string arg in args)
@@ -78,11 +80,14 @@ namespace BlynkMqttBridge
 							{
 								Topics.Add(new TopicEntry(s_topic, s_topic_out, s_extra_data, vpin, val_type, b_noretain, s_topic_out.Length == 0));
 
-								Helpers.Log(
-									"+t " + s_topic + " vp:" + s_vpin + " t:" + s_type, 
-									ConsoleColor.Cyan, 
-									"[config]", 
-									Helpers.LogLevel.Debug
+
+								Helpers.LogColor(ConsoleColor.Cyan, "[config]", Helpers.LogLevel.Debug,
+									("Add mapping MQTTTopic: ", ConsoleColor.White),
+									(s_topic, ConsoleColor.Cyan),
+									(" -> BlynkVPIN: ", ConsoleColor.White),
+									(s_vpin, ConsoleColor.Green),
+									(", type: ", ConsoleColor.White),
+									(s_type, ConsoleColor.Yellow)
 								);
 							}
 							else

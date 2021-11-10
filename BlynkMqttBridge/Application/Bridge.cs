@@ -85,22 +85,25 @@ namespace BlynkMqttBridge
 			{
 				PendingMqttTopics.Remove(Topic);
 			}
-			else
+			else if (blynkConn.Connected)
 			{
 				foreach (TopicEntry Entry in TopicList)
 				{
 					if (Entry.InTopic == Topic)
 					{
-						blynkConn.SendVirtualPin(Entry.BlynkVpin, Entry.Encoder.toBlynk(Entry, Payload));
+						string encoded = Entry.Encoder.toBlynk(Entry, Payload);
+						blynkConn.SendVirtualPin(Entry.BlynkVpin, encoded);
 
 						Helpers.LogColor(ConsoleColor.Green, "[mqtt->blynk]", Helpers.LogLevel.Debug,
 							("From MqttTopic ", ConsoleColor.White),
 							(Entry.InTopic, ConsoleColor.Cyan),
+							(" -> value: ", ConsoleColor.White),
+							(Payload.Replace("\n", ""), ConsoleColor.Yellow),
 							(" => ", ConsoleColor.Red),
 							("to BlynkVPin ", ConsoleColor.White),
 							(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
 							(" -> value: ", ConsoleColor.White),
-							(Payload, ConsoleColor.Yellow)
+							(encoded.Replace("\n", ""), ConsoleColor.Yellow)
 						);
 
 						break;
@@ -111,30 +114,36 @@ namespace BlynkMqttBridge
 
 		private void BlynkConn_VirtualPinReceived(BlynkLibrary.Blynk b, BlynkLibrary.VirtualPinEventArgs e)
 		{
-			foreach (TopicEntry Entry in TopicList)
+			if (mqttConn.IsConnected())
 			{
-				if (Entry.BlynkVpin == e.Data.Pin)
+				foreach (TopicEntry Entry in TopicList)
 				{
-					string inValue = e.Data.Value[0].ToString();
-					string BlynkOutTopic = Entry.OutTopic.Length > 0 ? Entry.OutTopic : Entry.InTopic;
+					if (Entry.BlynkVpin == e.Data.Pin)
+					{
+						string inValue = e.Data.Value[0].ToString();
+						string encoded = Entry.Encoder.fromBlynk(Entry, inValue);
+						string BlynkOutTopic = Entry.OutTopic.Length > 0 ? Entry.OutTopic : Entry.InTopic;
 
-					PendingMqttTopics.Add(BlynkOutTopic);
-					mqttConn.SendMessage(BlynkOutTopic, Entry.Encoder.fromBlynk(Entry, inValue), !Entry.NoRetain);
+						PendingMqttTopics.Add(BlynkOutTopic);
+						mqttConn.SendMessage(BlynkOutTopic, encoded, !Entry.NoRetain);
 
-					if (Entry.BlynkAck)
-						blynkConn.SendVirtualPin(e.Data.Pin, inValue);
+						if (Entry.BlynkAck)
+							blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
-					Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt]", Helpers.LogLevel.Debug,
-						("From BlynkVPin ", ConsoleColor.White),
-						(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
-						(" => ", ConsoleColor.Red),
-						("to MqttTopic ", ConsoleColor.White),
-						(Entry.InTopic, ConsoleColor.Cyan),
-						(" -> value: ", ConsoleColor.White),
-						(inValue, ConsoleColor.Yellow)
-					);
+						Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt]", Helpers.LogLevel.Debug,
+							("From BlynkVPin ", ConsoleColor.White),
+							(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
+							(" -> value: ", ConsoleColor.White),
+							(inValue.Replace("\n", ""), ConsoleColor.Yellow),
+							(" => ", ConsoleColor.Red),
+							("to MqttTopic ", ConsoleColor.White),
+							(Entry.InTopic, ConsoleColor.Cyan),
+							(" -> value: ", ConsoleColor.White),
+							(encoded.Replace("\n", ""), ConsoleColor.Yellow)
+						);
 
-					break;
+						break;
+					}
 				}
 			}
 		}
