@@ -249,7 +249,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 
 			foreach (object o in vp.Value)
 			{
-				txMessage.AddRange(ASCIIEncoding.ASCII.GetBytes(o.ToString().Replace(',', '.')));
+				txMessage.AddRange(ASCIIEncoding.UTF8.GetBytes(o.ToString().Replace(',', '.')));
 				txMessage.Add(0x00);
 			}
 
