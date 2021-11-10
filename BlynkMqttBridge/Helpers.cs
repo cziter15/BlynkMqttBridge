@@ -48,7 +48,7 @@ namespace BlynkMqttBridge
 				if (prefix.Length > 0)
 					prefix = " " + prefix;
 
-				Console.ForegroundColor = ConsoleColor.DarkYellow;
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.Write("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "]");
 
 				Console.ForegroundColor = PrefixColor;
