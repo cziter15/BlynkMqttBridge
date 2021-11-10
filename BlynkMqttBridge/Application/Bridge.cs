@@ -132,7 +132,7 @@ namespace BlynkMqttBridge
 						if (Entry.BlynkAck)
 							blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
-						Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt] ", Helpers.LogLevel.Debug,
+						Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt]", Helpers.LogLevel.Debug,
 							("Using [", ConsoleColor.White),
 							(Entry.Encoder.GetType().Name, ConsoleColor.Red),
 							("] From BlynkVPin ", ConsoleColor.White),
