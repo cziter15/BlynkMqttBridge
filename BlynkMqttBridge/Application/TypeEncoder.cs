@@ -27,7 +27,7 @@ namespace BlynkMqttBridge
 {
 	public class TypeEncoder
 	{
-		public class _StraightType
+		public class TStraightType
 		{
 			public virtual string fromBlynk(TopicEntry entry, string value)
 			{
@@ -40,7 +40,7 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		private class _OnOffType : _StraightType
+		private class TOnOffType : TStraightType
 		{
 			public override string fromBlynk(TopicEntry entry, string value)
 			{
@@ -50,7 +50,7 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		private class _LedType : _OnOffType
+		private class TLedType : TOnOffType
 		{
 			public override string toBlynk(TopicEntry entry, string value)
 			{
@@ -60,7 +60,7 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		private class _OnOffSegmentedType : _OnOffType
+		private class TOnOffSegmentedType : TOnOffType
 		{
 			public override string fromBlynk(TopicEntry entry, string value)
 			{
@@ -72,7 +72,7 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		private class _TerminalType : _StraightType
+		private class TTerminalType : TStraightType
 		{
 			public override string fromBlynk(TopicEntry entry, string value)
 			{
@@ -85,7 +85,7 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		private class _StringMap : _StraightType
+		private class TStringMap : TStraightType
 		{
 			public override string fromBlynk(TopicEntry entry, string value)
 			{
@@ -120,14 +120,14 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		public static _StraightType LedType = new _LedType();
-		public static _StraightType OnOffType = new _OnOffType();
-		public static _StraightType OnOffSegmented = new _OnOffSegmentedType();
-		public static _StraightType StraightType = new _StraightType();
-		public static _StraightType TerminalType = new _TerminalType();
-		public static _StraightType StringMap = new _StringMap();
-
-		public static _StraightType TypeFromName(string typename)
+		public static TStraightType LedType = new TLedType();
+		public static TStraightType OnOffType = new TOnOffType();
+		public static TStraightType OnOffSegmented = new TOnOffSegmentedType();
+		public static TStraightType StraightType = new TStraightType();
+		public static TStraightType TerminalType = new TTerminalType();
+		public static TStraightType StringMap = new TStringMap();
+					  
+		public static TStraightType TypeFromName(string typename)
 		{
 			switch (typename)
 			{

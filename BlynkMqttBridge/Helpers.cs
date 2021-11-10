@@ -61,6 +61,7 @@ namespace BlynkMqttBridge
 					Console.Write(text.text);
 				}
 
+				Console.ForegroundColor = ConsoleColor.White;
 				Console.Write(Environment.NewLine);
 			}
 		}

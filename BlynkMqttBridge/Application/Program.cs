@@ -75,7 +75,7 @@ namespace BlynkMqttBridge
 						int vpin = 0;
 						if (Int32.TryParse(s_vpin, out vpin))
 						{
-							TypeEncoder._StraightType val_type = TypeEncoder.TypeFromName(s_type);
+							TypeEncoder.TStraightType val_type = TypeEncoder.TypeFromName(s_type);
 							if (val_type != null)
 							{
 								Topics.Add(new TopicEntry(s_topic, s_topic_out, s_extra_data, vpin, val_type, b_noretain, s_topic_out.Length == 0));

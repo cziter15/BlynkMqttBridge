@@ -95,7 +95,9 @@ namespace BlynkMqttBridge
 						blynkConn.SendVirtualPin(Entry.BlynkVpin, encoded);
 
 						Helpers.LogColor(ConsoleColor.Green, "[mqtt->blynk]", Helpers.LogLevel.Debug,
-							("From MqttTopic ", ConsoleColor.White),
+							("Using [", ConsoleColor.White),
+							(Entry.Encoder.GetType().Name, ConsoleColor.Red),
+							("] from MqttTopic ", ConsoleColor.White),
 							(Entry.InTopic, ConsoleColor.Cyan),
 							(" -> value: ", ConsoleColor.White),
 							(Payload.Replace("\n", ""), ConsoleColor.Yellow),
@@ -130,8 +132,10 @@ namespace BlynkMqttBridge
 						if (Entry.BlynkAck)
 							blynkConn.SendVirtualPin(e.Data.Pin, inValue);
 
-						Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt]", Helpers.LogLevel.Debug,
-							("From BlynkVPin ", ConsoleColor.White),
+						Helpers.LogColor(ConsoleColor.Green, "[blynk->mqtt] ", Helpers.LogLevel.Debug,
+							("Using [", ConsoleColor.White),
+							(Entry.Encoder.GetType().Name, ConsoleColor.Red),
+							("] From BlynkVPin ", ConsoleColor.White),
 							(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
 							(" -> value: ", ConsoleColor.White),
 							(inValue.Replace("\n", ""), ConsoleColor.Yellow),

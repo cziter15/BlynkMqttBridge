@@ -32,9 +32,9 @@ namespace BlynkMqttBridge.Application
 		public bool BlynkAck { get; }
 		public bool NoRetain { get; }
 
-		public TypeEncoder._StraightType Encoder { get; }
+		public TypeEncoder.TStraightType Encoder { get; }
 
-		public TopicEntry(string InTopic, string OutTopic, string ExtraData, int BlynkVpin, TypeEncoder._StraightType Encoder, bool NoRetain, bool BlynkAck)
+		public TopicEntry(string InTopic, string OutTopic, string ExtraData, int BlynkVpin, TypeEncoder.TStraightType Encoder, bool NoRetain, bool BlynkAck)
 		{
 			this.InTopic = InTopic;
 			this.OutTopic = OutTopic;
