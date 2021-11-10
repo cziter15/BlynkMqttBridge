@@ -125,7 +125,7 @@ namespace BlynkMqttBridge.BlynkLibrary
 			Helpers.LogColor(ConsoleColor.Red, "[Mqtt-Library]", Helpers.LogLevel.Verbose,
 				("setConnection -> server: ", ConsoleColor.White),
 				(server + ":" + port, ConsoleColor.Magenta),
-				(", token:  ", ConsoleColor.White),
+				(", token: ", ConsoleColor.White),
 				(authentication, ConsoleColor.Cyan)
 			);
 
