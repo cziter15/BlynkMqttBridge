@@ -60,15 +60,21 @@ namespace BlynkMqttBridge
 			}
 		}
 
-		private class TOnOffSegmentedType : TOnOffType
+		private class TSubOrAddOne : TStraightType
 		{
 			public override string fromBlynk(TopicEntry entry, string value)
 			{
-				return value == "1" ? "1" : "0";
+				int intval = 0;
+				int.TryParse(value, out intval);
+
+				return (intval - 1).ToString();
 			}
 			public override string toBlynk(TopicEntry entry, string value)
 			{
-				return value == "1" ? "1" : "2";
+				int intval = 0;
+				int.TryParse(value, out intval);
+
+				return (intval + 1).ToString();
 			}
 		}
 
@@ -122,7 +128,7 @@ namespace BlynkMqttBridge
 
 		public static TStraightType LedType = new TLedType();
 		public static TStraightType OnOffType = new TOnOffType();
-		public static TStraightType OnOffSegmented = new TOnOffSegmentedType();
+		public static TStraightType SubOrAddOne = new TSubOrAddOne();
 		public static TStraightType StraightType = new TStraightType();
 		public static TStraightType TerminalType = new TTerminalType();
 		public static TStraightType StringMap = new TStringMap();
@@ -133,7 +139,7 @@ namespace BlynkMqttBridge
 			{
 				case "LedType": return LedType;
 				case "OnOffType": return OnOffType;
-				case "OnOffSegmented": return OnOffSegmented;
+				case "SubOrAddOne": return SubOrAddOne;
 				case "StraightType": return StraightType;
 				case "TerminalType": return TerminalType;
 				case "StringMap": return StringMap;
