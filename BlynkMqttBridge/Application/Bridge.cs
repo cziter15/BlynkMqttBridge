@@ -92,6 +92,10 @@ namespace BlynkMqttBridge
 					if (Entry.InTopic == Topic)
 					{
 						string encoded = Entry.Encoder.toBlynk(Entry, Payload);
+
+						bool skipSource = !Entry.Encoder.getPrintSourceValue();
+						bool skipTarget = !Entry.Encoder.getPrintTargetValue();
+
 						blynkConn.SendVirtualPin(Entry.BlynkVpin, encoded);
 
 						Helpers.LogColor(ConsoleColor.Yellow, "[mqtt->blynk]", Helpers.LogLevel.Debug,
@@ -99,12 +103,12 @@ namespace BlynkMqttBridge
 							(Entry.Encoder.GetType().Name, ConsoleColor.Red),
 							("] from MqttTopic ", ConsoleColor.White),
 							(Entry.InTopic, ConsoleColor.Cyan),
-							(" -> value: ", ConsoleColor.White),
-							(Payload.Replace("\n", ""), ConsoleColor.Yellow),
+							(skipSource ? String.Empty : " -> value: ", ConsoleColor.White),
+							(skipSource ? String.Empty : Payload.Replace("\n", ""), ConsoleColor.Yellow),
 							(" => ", ConsoleColor.Red),
 							("to BlynkVPin ", ConsoleColor.White),
-							(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
-							(" -> value: ", ConsoleColor.White),
+							(skipTarget ? String.Empty : Entry.BlynkVpin.ToString(), ConsoleColor.Green),
+							(skipTarget ? String.Empty : " -> value: ", ConsoleColor.White),
 							(encoded.Replace("\n", ""), ConsoleColor.Yellow)
 						);
 
@@ -124,6 +128,10 @@ namespace BlynkMqttBridge
 					{
 						string inValue = e.Data.Value[0].ToString();
 						string encoded = Entry.Encoder.fromBlynk(Entry, inValue);
+
+						bool skipSource = !Entry.Encoder.getPrintSourceValue();
+						bool skipTarget = !Entry.Encoder.getPrintTargetValue();
+
 						string BlynkOutTopic = Entry.OutTopic.Length > 0 ? Entry.OutTopic : Entry.InTopic;
 
 						PendingMqttTopics.Add(BlynkOutTopic);
@@ -131,19 +139,19 @@ namespace BlynkMqttBridge
 
 						if (Entry.BlynkAck)
 							blynkConn.SendVirtualPin(e.Data.Pin, inValue);
-
+						
 						Helpers.LogColor(ConsoleColor.Magenta, "[blynk->mqtt]", Helpers.LogLevel.Debug,
 							("Using [", ConsoleColor.White),
 							(Entry.Encoder.GetType().Name, ConsoleColor.Red),
 							("] From BlynkVPin ", ConsoleColor.White),
 							(Entry.BlynkVpin.ToString(), ConsoleColor.Green),
-							(" -> value: ", ConsoleColor.White),
-							(inValue.Replace("\n", ""), ConsoleColor.Yellow),
+							(skipSource ? String.Empty : " -> value: ", ConsoleColor.White),
+							(skipSource ? String.Empty : inValue.Replace("\n", ""), ConsoleColor.Yellow),
 							(" => ", ConsoleColor.Red),
 							("to MqttTopic ", ConsoleColor.White),
 							(Entry.InTopic, ConsoleColor.Cyan),
-							(" -> value: ", ConsoleColor.White),
-							(encoded.Replace("\n", ""), ConsoleColor.Yellow)
+							(skipTarget ? String.Empty : " -> value: ", ConsoleColor.White),
+							(skipTarget ? String.Empty : encoded.Replace("\n", ""), ConsoleColor.Yellow)
 						);
 
 						break;

@@ -29,6 +29,8 @@ namespace BlynkMqttBridge
 	{
 		public class TStraightType
 		{
+			public virtual bool getPrintSourceValue() { return true;  }
+			public virtual bool getPrintTargetValue() { return true; }
 			public virtual string fromBlynk(TopicEntry entry, string value)
 			{
 				return value;
@@ -80,6 +82,10 @@ namespace BlynkMqttBridge
 
 		private class TTerminalType : TStraightType
 		{
+			public override bool getPrintSourceValue()
+			{
+				return false;
+			}
 			public override string fromBlynk(TopicEntry entry, string value)
 			{
 				return value;
